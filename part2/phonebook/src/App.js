@@ -10,6 +10,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setNewFilter] = useState('')
+  const [message, setMessage ] = useState(null)
   
   const handleNameChange = (event) => {setNewName(event.target.value)}
   const handleNumberChange = (event) => {setNewNumber(event.target.value)}
@@ -21,6 +22,35 @@ const App = () => {
       .then(returnedPersons => setPersons(returnedPersons))
   },[])
  
+  const Notification = ({message}) => {
+    if(message === null){
+      return null
+    }
+
+    let notificationStyle = {
+      color: 'green',
+      background: 'lightgrey',
+      fontSize: 20,
+      borderStyle: 'solid',
+      borderRadius: 5,
+      padding: 10,
+      marginBottom: 10
+    }
+
+    const firstChar = message.charAt(0)
+    if(firstChar === 'A' || firstChar === 'U'){
+      notificationStyle.color = 'green'
+    }else{
+      notificationStyle.color = 'red'
+    }
+
+    return (
+      <div style={notificationStyle}>
+        {message}
+      </div>
+    )
+
+  }
 
   const addPerson = (event) => {
     if (persons.some(person => person.name===newName)){
@@ -36,8 +66,13 @@ const App = () => {
         .update(newName, personObject)
         .then(oldPerson => {
           setPersons(persons.map(person =>  person.id !== newName ? person : oldPerson))
+          setMessage(`Updated ${newName}`)
+          setTimeout( () => {setMessage(null)},5000)
           setNewName('')
           setNewNumber('')
+        }).catch( error => {
+          setMessage(`Information of ${newName} has already been removed from server`)
+          setTimeout( () => {setMessage(null)},5000)
         })
 
       }
@@ -53,8 +88,10 @@ const App = () => {
         .create(personObject)
         .then(newPerson => {
           setPersons(persons.concat(newPerson))
+          setMessage(`Added ${newPerson.name}`)
+          setTimeout( () => {setMessage(null)},5000)
           setNewName('')
-          setNewNumber('')
+          setNewNumber('')          
         })
     }
   }
@@ -63,6 +100,8 @@ const App = () => {
     if (window.confirm(`Delete ${persons.find(person => person.id === id).name}`)){
       personService.remove(id)
       setPersons(persons.filter(person => person.id !== id))
+      setMessage(`Removed ${id}`)
+      setTimeout( () => {setMessage(null)},5000)
     }
    
   }
@@ -70,6 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message}/>
       <PersonForm addPerson={addPerson} newName={newName} handleNameChange={handleNameChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
       <br/>
       <Filter filter={filter} handleFilterChange={handleFilterChange}/>
