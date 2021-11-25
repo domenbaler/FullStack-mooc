@@ -3,6 +3,7 @@ GET http://localhost:3003/api/blogs/
 ###
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkhlbGxvS2l0dHkiLCJpZCI6IjYxOWZhZmQ3YWNiZWU0OTVjMTRiZjFhNCIsImlhdCI6MTYzNzg3MzkxMH0.iuew-3LvQ9UN5Rs20OjEbXPzS8O_h05ShRSMCTWnMpI
 
 {
     "title": "FiRsT bLoG",
@@ -10,6 +11,22 @@ Content-Type: application/json
     "url": "www.blog.com",
     "likes": 5
 }
+
+
+###
+DELETE http://localhost:3003/api/blogs/619ffd23e73f7890c193a718
+
+
+###
+DELETE http://localhost:3003/api/blogs/619ffd23e73f7890c193a718
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IkhlbGxvS2l0dHkiLCJpZCI6IjYxOWZhZmQ3YWNiZWU0OTVjMTRiZjFhNCIsImlhdCI6MTYzNzg3MzkxMH0.iuew-3LvQ9UN5Rs20OjEbXPzS8O_h05ShRSMCTWnMpI
+
+
+
+
+
+
+
 
 ###
 POST http://localhost:3003/api/blogs
