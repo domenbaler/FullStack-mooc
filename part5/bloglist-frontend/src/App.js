@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import Blog from './components/Blog'
 import Notification from './components/Notification'
@@ -18,11 +18,11 @@ const App = () => {
 
   const [user, setUser] = useState(null)
 
-
+  const blogFormRef = useRef()
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs( blogs )
+      setBlogs( blogs.sort((firstBlog, secondBlog) => secondBlog.likes - firstBlog.likes) )
     )  
   }, [])
 
@@ -54,6 +54,7 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
+      
     }catch(exception) {
       setErrorMessage('Wrong credentials')
       setTimeout(() => {
@@ -68,16 +69,19 @@ const App = () => {
     setBlogs(blogs.concat(returned))
   
     console.log(returned)
-
+    console.log(returned.user.id)
+    blogFormRef.current.toggleVisibility()
     setErrorMessage(`a new blog ${blogObject.title} by ${blogObject.author} added`)
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
   }
+
+  
   
   const blogForm = () => {
     return(
-        <Togglable>
+        <Togglable ref={blogFormRef}>
           <BlogForm
           createBlog={addBlog}
           />
@@ -102,6 +106,11 @@ const App = () => {
     />
   )
 
+  const removeBlog = (id) => {
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
+
   return (
     <div>
       {user === null ? 
@@ -114,7 +123,7 @@ const App = () => {
           <Notification message={errorMessage} isError={false}/>
           <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p> 
           {blogForm()}
-          {blogs.map(blog =>  <Blog key={blog.id} blog={blog} />)}
+          {blogs.map(blog =>  <Blog key={blog.id} blog={blog} removeBlog={removeBlog} currentUser={user.name}/>)}
         </div>
       }
     </div>
