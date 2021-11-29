@@ -69,6 +69,7 @@ const Blog = ({ blog, removeBlog,sortAfterLike , currentUser }) => {
 Blog.propTypes = {
     blog: PropTypes.object.isRequired,
     removeBlog: PropTypes.func.isRequired,
+    sortAfterLike: PropTypes.func.isRequired,
     currentUser: PropTypes.string.isRequired
 }
 

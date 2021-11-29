@@ -13,11 +13,12 @@ const blog = {
 }
 
 const removeBlog = () => { }
+const sortAfterLike = () => { }
 const currentUser = 'Bon Jovi'
 
 test('Without button click show only title and author', () => {
     const component = render(
-        <Blog blog={blog} removeBlog={removeBlog} currentUser={currentUser}/>
+        <Blog blog={blog} removeBlog={removeBlog} sortAfterLike={sortAfterLike} currentUser={currentUser}/>
     )
 
     expect(component.container).toHaveTextContent('How to')
@@ -30,7 +31,7 @@ test('Without button click show only title and author', () => {
 
 test('With button clicked show all details', () => {
     const component = render(
-        <Blog blog={blog} removeBlog={removeBlog} currentUser={currentUser}/>
+        <Blog blog={blog} removeBlog={removeBlog} sortAfterLike={sortAfterLike} currentUser={currentUser}/>
     )
 
     const button = component.getByText( 'view' )
@@ -46,18 +47,16 @@ test('With button clicked show all details', () => {
 })
 
 test('When like button is clicked twice, onClick executes twice', () => {
+    const mockHandler = jest.fn()
+
     const component = render(
-        <Blog blog={blog} removeBlog={removeBlog} currentUser={currentUser}/>
+        <Blog blog={blog} removeBlog={removeBlog} sortAfterLike={mockHandler} currentUser={currentUser}/>
     )
 
     const button = component.getByText( 'view' )
     fireEvent.click(button)
 
-    const mockHandler = jest.fn()
-
     const likeButton = component.getByText('like')
-    // event handler is not recieved as a prop
-    likeButton.addEventListener('click', mockHandler)
 
     fireEvent.click(likeButton)
     fireEvent.click(likeButton)
