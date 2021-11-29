@@ -66,6 +66,7 @@ const App = () => {
 
     const addBlog = async (blogObject) => {
         const returned = await blogService.create(blogObject)
+        returned.user = { id: returned.user, username: user.username, name: user.name }
         setBlogs(blogs.concat(returned))
 
         console.log(returned)
@@ -110,6 +111,13 @@ const App = () => {
         setBlogs(blogs.filter(blog => blog.id !== id))
     }
 
+    const sortAfterLike = () => {
+        console.log( 'sorting' )
+        blogService.getAll().then(blogs =>
+            setBlogs( blogs.sort((firstBlog, secondBlog) => secondBlog.likes - firstBlog.likes) )
+        )
+    }
+
 
     return (
         <div>
@@ -123,7 +131,7 @@ const App = () => {
                     <Notification message={errorMessage} isError={false}/>
                     <p>{user.name} logged-in <button onClick={handleLogout}>logout</button></p>
                     {blogForm()}
-                    {blogs.map(blog =>  <Blog key={blog.id} blog={blog} removeBlog={removeBlog} currentUser={user.name}/>)}
+                    {blogs.map(blog =>  <Blog key={blog.id} blog={blog} removeBlog={removeBlog} sortAfterLike={sortAfterLike} currentUser={user.name}/>)}
                 </div>
             }
         </div>

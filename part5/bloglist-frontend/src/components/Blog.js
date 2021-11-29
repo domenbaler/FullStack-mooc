@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 
-const Blog = ({ blog, removeBlog,currentUser }) => {
+const Blog = ({ blog, removeBlog,sortAfterLike , currentUser }) => {
 
     const [showDetails, setShowDetails] = useState(false)
     const [likes, setLikes] = useState(blog.likes)
@@ -22,6 +22,7 @@ const Blog = ({ blog, removeBlog,currentUser }) => {
 
         blogService.update(blogObject,blog.id)
         setLikes(likes+1)
+        sortAfterLike()
 
     }
 
@@ -48,16 +49,16 @@ const Blog = ({ blog, removeBlog,currentUser }) => {
                         {blog.title} ( {blog.author} ) <button onClick={toggleDetails}>hide</button>
                     </div>
                     <div>{blog.url}</div>
-                    <div>likes: {likes} <button onClick={handleLike}>like</button></div>
+                    <div>likes: {likes} <button id="like-blog" onClick={handleLike}>like</button></div>
                     <div>{blog.user.name}</div>
                     { blog.user.name === currentUser ?
-                        <button onClick={handleRemove}>remove</button> : <div></div>
+                        <button id="remove-blog" onClick={handleRemove}>remove</button> : <div></div>
                     }
 
                 </div>
                 :
                 <div style={blogStyle}>
-                    {blog.title} ( {blog.author} ) <button onClick={toggleDetails}>view</button>
+                    {blog.title} ( {blog.author} ) <button id="show-blog-details" onClick={toggleDetails}>view</button>
                 </div>
             }
         </div>
